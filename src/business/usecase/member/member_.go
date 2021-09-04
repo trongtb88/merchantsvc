@@ -34,11 +34,7 @@ func (m *member) GetMembersByParam(ctx context.Context, param entity.GetMemberPa
 				UpdatedAt:       members[idx].UpdatedAt,
 			}
 
-			if members[idx].MemberStatus == common.StatusActive {
-				memberData.MemberStatus = "Active"
-			} else {
-				memberData.MemberStatus = "InActive"
-			}
+			memberData.MemberStatus = common.FillStatusInStr(members[idx].MemberStatus)
 
 			acc, _, err := m.account.GetAccountsByParam(ctx, entity.GetAccountParam{
 				Id:  members[idx].MerchantId,
@@ -47,6 +43,7 @@ func (m *member) GetMembersByParam(ctx context.Context, param entity.GetMemberPa
 			if err != nil {
 				log.Println("Error when get merchant account", err)
 			} else {
+				acc[0].MerchantStatusInStr = common.FillStatusInStr(acc[0].MerchantStatus)
 				memberData.MerchantAccount = acc[0]
 			}
 			membersData = append(membersData, memberData)

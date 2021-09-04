@@ -22,11 +22,7 @@ func (a *account) GetAccountsByParam(ctx context.Context, param entity.GetAccoun
 	accs, p, err := a.account.GetAccountsByParam(ctx, param)
 	if err == nil {
 		for idx, _ := range accs {
-			if accs[idx].MerchantStatus == common.StatusActive {
-				accs[idx].MerchantStatusInStr = "Active"
-			} else {
-				accs[idx].MerchantStatusInStr = "InActive"
-			}
+			accs[idx].MerchantStatusInStr = common.FillStatusInStr(accs[idx].MerchantStatus)
 		}
 	}
 	return accs, p, err

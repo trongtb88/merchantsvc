@@ -51,7 +51,9 @@ func (a *account) SQLGetAccountsByParam(ctx context.Context, param entity.GetAcc
 		account.MerchantName = param.Name
 	}
 
-	account.MerchantStatus = common.StatusActive
+	if param.Status.Valid {
+		account.MerchantStatus = int(param.Status.Int32)
+	}
 
 	if param.Limit <= 0 {
 		param.Limit = 10

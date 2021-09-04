@@ -48,8 +48,8 @@ func (rst *rest) Serve() {
 
 	rst.mux.HandleFunc("/v1/accounts/members", rst.CreateMerchantMember).Methods(http.MethodPost)
 	rst.mux.HandleFunc("/v1/accounts/members", rst.GetMerchantMembers).Methods(http.MethodGet)
-	rst.mux.HandleFunc("/v1/accounts/members", rst.UpdateMerchantAccounts).Methods(http.MethodPut)
-	rst.mux.HandleFunc("/v1/accounts/members/{member_id}", rst.DeleteMerchantAccounts).Methods(http.MethodDelete)
+	rst.mux.HandleFunc("/v1/accounts/members", rst.UpdateMerchantMember).Methods(http.MethodPut)
+	rst.mux.HandleFunc("/v1/accounts/members/{member_id}", rst.DeleteMerchantMember).Methods(http.MethodDelete)
 
 	rst.mux.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 }

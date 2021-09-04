@@ -5,6 +5,6 @@ type Pagination struct {
 	TotalPages      int64    `json:"total_pages"`
 	TotalElements   int64    `json:"total_elements"`
 	SortBy          []string `json:"sort_by"`
-	CursorStart     *string  `json:"cursor_start,omitempty"`
+	CursorStart     *string  `json:"cursor_start,omitempty"` // TODO improve pagination using cursor
 	CursorEnd       *string  `json:"cursor_end,omitempty"`
 }

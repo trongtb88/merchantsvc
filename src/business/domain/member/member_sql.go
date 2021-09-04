@@ -53,14 +53,12 @@ func (m *member) SQLGetMembersByParam(ctx context.Context, param entity.GetMembe
 		member.MemberEmail = param.Email
 	}
 
-	member.MemberStatus = common.StatusActive
-
 	if param.Limit <= 0 {
-		param.Limit = 10
+		param.Limit = common.DefaultLimit
 	}
 
 	if param.Page <= 0 {
-		param.Page = 1
+		param.Page = common.DefaultPage
 	}
 
 	tx := m.sql.Model(&entity.MerchantMember{}).Debug().Where(&member).Limit(param.Limit).Offset((param.Page - 1) * param.Limit).Find(&results)
