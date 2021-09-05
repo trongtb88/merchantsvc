@@ -10,7 +10,8 @@
    go get .    
    go run src/cmd/main.go
 ```
-8. If you change something related to swagger, run this command to update documentation
+8. If you change something related to swagger, run this command to update documentation, 
+   it will re-generate docs folder at project source code
 ```sh
    swag init -g ./src/cmd/main.go
    
