@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"github.com/trongtb88/merchantsvc/src/middleware"
 	"net/http"
 	"sync"
 
@@ -41,15 +42,15 @@ func (rst *rest) Serve() {
 		})
 	})
 
-	rst.mux.HandleFunc("/v1/accounts", rst.CreateMerchantAccount).Methods(http.MethodPost)
-	rst.mux.HandleFunc("/v1/accounts", rst.GetMerchantAccounts).Methods(http.MethodGet)
-	rst.mux.HandleFunc("/v1/accounts", rst.UpdateMerchantAccounts).Methods(http.MethodPut)
-	rst.mux.HandleFunc("/v1/accounts/{account_id}", rst.DeleteMerchantAccounts).Methods(http.MethodDelete)
+	rst.mux.HandleFunc("/v1/accounts", middleware.Authenticate(rst.CreateMerchantAccount)).Methods(http.MethodPost)
+	rst.mux.HandleFunc("/v1/accounts", middleware.Authenticate(rst.GetMerchantAccounts)).Methods(http.MethodGet)
+	rst.mux.HandleFunc("/v1/accounts", middleware.Authenticate(rst.UpdateMerchantAccounts)).Methods(http.MethodPut)
+	rst.mux.HandleFunc("/v1/accounts/{account_id}", middleware.Authenticate(rst.DeleteMerchantAccounts)).Methods(http.MethodDelete)
 
-	rst.mux.HandleFunc("/v1/accounts/members", rst.CreateMerchantMember).Methods(http.MethodPost)
-	rst.mux.HandleFunc("/v1/accounts/members", rst.GetMerchantMembers).Methods(http.MethodGet)
-	rst.mux.HandleFunc("/v1/accounts/members", rst.UpdateMerchantMember).Methods(http.MethodPut)
-	rst.mux.HandleFunc("/v1/accounts/members/{member_id}", rst.DeleteMerchantMember).Methods(http.MethodDelete)
+	rst.mux.HandleFunc("/v1/accounts/members", middleware.Authenticate(rst.CreateMerchantMember)).Methods(http.MethodPost)
+	rst.mux.HandleFunc("/v1/accounts/members", middleware.Authenticate(rst.GetMerchantMembers)).Methods(http.MethodGet)
+	rst.mux.HandleFunc("/v1/accounts/members", middleware.Authenticate(rst.UpdateMerchantMember)).Methods(http.MethodPut)
+	rst.mux.HandleFunc("/v1/accounts/members/{member_id}", middleware.Authenticate(rst.DeleteMerchantMember)).Methods(http.MethodDelete)
 
 	rst.mux.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 }

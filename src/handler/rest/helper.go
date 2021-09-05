@@ -12,11 +12,11 @@ import (
 
 func (e *rest) httpRespSuccess(w http.ResponseWriter, r *http.Request, statusCode int, data interface{}, p *entity.Pagination) {
 
-	meta := Meta{
+	meta := entity.Meta{
 		Path:       r.URL.String(),
 		StatusCode: statusCode,
 		Status:     http.StatusText(statusCode),
-		Error:      ErrorMessage{
+		Error:      entity.ErrorMessage{
 			Code:    "OK",
 			Message: "Success",
 		},
@@ -45,7 +45,7 @@ func (e *rest) httpRespSuccess(w http.ResponseWriter, r *http.Request, statusCod
 
 
 	if err != nil {
-		e.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		e.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "StatusInternalServerError",
 			Message: err.Error(),
 		})
@@ -57,21 +57,10 @@ func (e *rest) httpRespSuccess(w http.ResponseWriter, r *http.Request, statusCod
 	_, _ = w.Write(raw)
 }
 
-func (e *rest) Marshal(resp interface{}) ([]byte, error) {
-	return json.Marshal(&resp)
-}
+func (e *rest) httpRespError(w http.ResponseWriter, r *http.Request, statusCode int, errorMsg entity.ErrorMessage) {
 
-//func (rst *rest) httpRespError(w http.ResponseWriter, statusCode int, message ErrorMessage) {
-//	raw, _ := json.Marshal(message)
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(statusCode)
-//	_, _ = w.Write(raw)
-//}
-
-func (e *rest) httpRespError(w http.ResponseWriter, r *http.Request, statusCode int, errorMsg ErrorMessage) {
-
-	jsonErrResp := &HTTPErrResp{
-		Meta: Meta{
+	jsonErrResp := &entity.HTTPErrResp{
+		Meta: entity.Meta{
 			Path:       r.URL.String(),
 			StatusCode: statusCode,
 			Status:     http.StatusText(statusCode),
@@ -90,3 +79,8 @@ func (e *rest) httpRespError(w http.ResponseWriter, r *http.Request, statusCode 
 	w.WriteHeader(statusCode)
 	_, _ = w.Write(raw)
 }
+
+func (e *rest) Marshal(resp interface{}) ([]byte, error) {
+	return json.Marshal(&resp)
+}
+

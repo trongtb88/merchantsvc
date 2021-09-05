@@ -11,10 +11,10 @@ import (
 	"os"
 
 	resthandler "github.com/trongtb88/merchantsvc/src/handler/rest"
+	"github.com/trongtb88/merchantsvc/docs"
 	// Business Layer Dep
 	domain "github.com/trongtb88/merchantsvc/src/business/domain"
 	usecase "github.com/trongtb88/merchantsvc/src/business/usecase"
-	"github.com/trongtb88/merchantsvc/docs"
 	"github.com/trongtb88/merchantsvc/src/cmd/db"
 )
 
@@ -28,6 +28,9 @@ var (
 	uc  *usecase.Usecase
 )
 
+// @securityDefinitions.basic BasicAuth
+// @in header
+// @name Authorization
 func main() {
 
 
@@ -62,11 +65,11 @@ func main() {
 
 	router := mux.NewRouter()
 
-	docs.SwaggerInfo.Title = os.Getenv("Meta.Namespace")
-	docs.SwaggerInfo.Description = os.Getenv("Meta.Description")
-	docs.SwaggerInfo.Version = os.Getenv("Meta.Version")
-	docs.SwaggerInfo.BasePath = os.Getenv("Meta.BasePath")
-	docs.SwaggerInfo.Host = os.Getenv("Meta.Host")
+	docs.SwaggerInfo.Title = os.Getenv("Meta_Namespace")
+	docs.SwaggerInfo.Description = os.Getenv("Meta_Description")
+	docs.SwaggerInfo.Version = os.Getenv("Meta_Version")
+	docs.SwaggerInfo.BasePath = os.Getenv("Meta_BasePath")
+	docs.SwaggerInfo.Host = os.Getenv("Meta_Host")
 
 	// REST Handler Initialization
 	_ = resthandler.Init(router,  uc)

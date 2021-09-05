@@ -20,6 +20,7 @@ var decoder = schema.NewDecoder()
 // @Tags MerchantAccount
 // @Accept json
 // @Produce json
+// @Security BasicAuth[]
 // @Param data body entity.CreateAccountParam true "Body Request"
 // @Success 201 {object} rest.ResponseCreateAccount
 // @Failure 400 {object} rest.HTTPErrResp
@@ -30,7 +31,7 @@ func (rst *rest) CreateMerchantAccount(w http.ResponseWriter, r *http.Request) {
 	var param entity.CreateAccountParam
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -38,7 +39,7 @@ func (rst *rest) CreateMerchantAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.Unmarshal(body, &param); err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -50,7 +51,7 @@ func (rst *rest) CreateMerchantAccount(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:     "CreateAccountError",
 			Message: err.Error(),
 		})
@@ -58,7 +59,7 @@ func (rst *rest) CreateMerchantAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(accounts) > 0 {
-		rst.httpRespError(w, r,http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r,http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "DuplicateMerchantCode",
 			Message: "Please choose other merchant code",
 		})
@@ -67,7 +68,7 @@ func (rst *rest) CreateMerchantAccount(w http.ResponseWriter, r *http.Request) {
 
 	account, err := rst.uc.Account.CreateAccount(r.Context(), param)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:     "CreateAccountError",
 			Message: err.Error(),
 		})
@@ -93,7 +94,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	var param entity.UpdateMerchantAccount
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -101,7 +102,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if err := json.Unmarshal(body, &param); err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -109,7 +110,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if param.Id <= 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidMerchantId",
 			Message: "Invalid MerchantId",
 		})
@@ -117,7 +118,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if len(param.MerchantCode) <= 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidMerchantCode",
 			Message: "Invalid Merchant Code",
 		})
@@ -129,7 +130,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	})
 
 	if len(accountsById) == 0 {
-		rst.httpRespError(w, r, http.StatusNotFound, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusNotFound, entity.ErrorMessage{
 			Code:     "NotFoundMerchantId",
 			Message: "Not Found Merchant Id",
 		})
@@ -144,7 +145,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 		})
 
 		if err != nil {
-			rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+			rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 				Code:     "GetAccountByParamError",
 				Message: err.Error(),
 			})
@@ -152,7 +153,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 		}
 
 		if len(accountsByCode) > 0 && accountsByCode[0].Id != param.Id {
-			rst.httpRespError(w, r, http.StatusNotFound, ErrorMessage{
+			rst.httpRespError(w, r, http.StatusNotFound, entity.ErrorMessage{
 				Code:     "ExistMerchantCode",
 				Message: "This merchant code is belong to other merchant, please choose other value",
 			})
@@ -168,7 +169,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	accounts, err := rst.uc.Account.UpdateAccount(r.Context(), acc)
 
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:     "UpdateAccountError",
 			Message: err.Error(),
 		})
@@ -184,6 +185,7 @@ func (rst *rest) UpdateMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 // @Tags MerchantAccount
 // @Accept json
 // @Produce json
+// @Security BasicAuth
 // @Param id query integer false "Merchant Account ID"
 // @Param code query string false "Merchant Account Code"
 // @Param name query integer false "Merchant Account Name"
@@ -199,7 +201,7 @@ func (rst *rest) GetMerchantAccounts(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Form)
 	err := r.ParseForm()
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "GetAccountsError",
 			Message: err.Error(),
 		})
@@ -210,7 +212,7 @@ func (rst *rest) GetMerchantAccounts(w http.ResponseWriter, r *http.Request) {
 
 	err = decoder.Decode(&param, r.Form)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "GetAccountsError",
 			Message: err.Error(),
 		})
@@ -221,7 +223,7 @@ func (rst *rest) GetMerchantAccounts(w http.ResponseWriter, r *http.Request) {
 	accounts, pagination, err := rst.uc.Account.GetAccountsByParam(r.Context(), param)
 
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:     "GetAccountsError",
 			Message: err.Error(),
 		})
@@ -237,6 +239,7 @@ func (rst *rest) GetMerchantAccounts(w http.ResponseWriter, r *http.Request) {
 // @Tags MerchantAccount
 // @Accept json
 // @Produce json
+// @Security BasicAuth[]
 // @Param account_id path integer true "Merchant Account ID"
 // @Success 200 {object} rest.ResponseCreateAccount
 // @Failure 400 {object} rest.HTTPErrResp
@@ -250,7 +253,7 @@ func (rst *rest) DeleteMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	idParam, _ := vars["account_id"]
 
 	if len(idParam) == 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidMerchantAccountId",
 			Message: "Invalid Merchant Account Id",
 		})
@@ -258,7 +261,7 @@ func (rst *rest) DeleteMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if accountId, err = strconv.ParseInt(idParam,10,64); err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:     "InvalidMerchantAccountId",
 			Message: "MerchantAccountId must be number",
 		})
@@ -270,7 +273,7 @@ func (rst *rest) DeleteMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 	})
 
 	if len(accountsById) == 0 {
-		rst.httpRespError(w, r, http.StatusNotFound, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusNotFound, entity.ErrorMessage{
 			Code:     "NotFoundMerchantId",
 			Message: "Not Found Merchant Id",
 		})
@@ -282,7 +285,7 @@ func (rst *rest) DeleteMerchantAccounts(w http.ResponseWriter, r *http.Request) 
 
 	_, err = rst.uc.Account.UpdateAccount(r.Context(), acc)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:     "DeleteAccountsError",
 			Message: err.Error(),
 		})

@@ -1,0 +1,496 @@
+definitions:
+  entity.CreateAccountParam:
+    properties:
+      merchant_code:
+        maxLength: 50
+        minLength: 1
+        type: string
+      merchant_name:
+        maxLength: 200
+        minLength: 1
+        type: string
+    type: object
+  entity.CreateMemberParam:
+    properties:
+      member_email:
+        maxLength: 100
+        minLength: 1
+        type: string
+      member_name:
+        maxLength: 200
+        minLength: 1
+        type: string
+      merchant_id:
+        type: integer
+    type: object
+  entity.ErrorMessage:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  entity.MerchantAccount:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      merchant_code:
+        type: string
+      merchant_name:
+        type: string
+      merchant_status:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  entity.MerchantMember:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      member_email:
+        type: string
+      member_name:
+        type: string
+      member_status:
+        type: string
+      merchant_id:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  entity.MerchantMemberData:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      member_email:
+        type: string
+      member_name:
+        type: string
+      member_status:
+        type: string
+      merchant:
+        $ref: '#/definitions/entity.MerchantAccount'
+        type: object
+      updated_at:
+        type: string
+    type: object
+  entity.Meta:
+    properties:
+      error:
+        $ref: '#/definitions/entity.ErrorMessage'
+        type: object
+      path:
+        type: string
+      status:
+        type: string
+      status_code:
+        type: integer
+      timestamp:
+        type: string
+    type: object
+  entity.Pagination:
+    properties:
+      current_page:
+        type: integer
+      cursor_end:
+        type: string
+      cursor_start:
+        description: TODO improve pagination using cursor
+        type: string
+      sort_by:
+        items:
+          type: string
+        type: array
+      total_elements:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  entity.UpdateMerchantAccount:
+    properties:
+      id:
+        type: integer
+      merchant_code:
+        type: string
+      merchant_name:
+        type: string
+    type: object
+  entity.UpdateMerchantMember:
+    properties:
+      id:
+        type: integer
+      member_email:
+        type: string
+      member_name:
+        type: string
+    type: object
+  rest.HTTPErrResp:
+    properties:
+      metadata:
+        $ref: '#/definitions/entity.Meta'
+        type: object
+    type: object
+  rest.ResponseCreateAccount:
+    properties:
+      data:
+        $ref: '#/definitions/entity.MerchantAccount'
+        type: object
+      metadata:
+        $ref: '#/definitions/entity.Meta'
+        type: object
+    type: object
+  rest.ResponseCreateMember:
+    properties:
+      data:
+        $ref: '#/definitions/entity.MerchantMember'
+        type: object
+      metadata:
+        $ref: '#/definitions/entity.Meta'
+        type: object
+    type: object
+  rest.ResponseGetAccounts:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entity.MerchantAccount'
+        type: array
+      metadata:
+        $ref: '#/definitions/entity.Meta'
+        type: object
+      pagination:
+        $ref: '#/definitions/entity.Pagination'
+        type: object
+    type: object
+  rest.ResponseGetMembers:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entity.MerchantMemberData'
+        type: array
+      metadata:
+        $ref: '#/definitions/entity.Meta'
+        type: object
+      pagination:
+        $ref: '#/definitions/entity.Pagination'
+        type: object
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /v1/accounts:
+    get:
+      consumes:
+      - application/json
+      description: Get Merchant Accounts godoc
+      parameters:
+      - description: Merchant Account ID
+        in: query
+        name: id
+        type: integer
+      - description: Merchant Account Code
+        in: query
+        name: code
+        type: string
+      - description: Merchant Account Name
+        in: query
+        name: name
+        type: integer
+      - description: ' '
+        in: query
+        name: page
+        type: integer
+      - description: ' '
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseGetAccounts'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      security:
+      - BasicAuth: []
+      summary: Get Merchant Accounts godoc
+      tags:
+      - MerchantAccount
+    post:
+      consumes:
+      - application/json
+      description: Create Merchant Account
+      parameters:
+      - description: Body Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CreateAccountParam'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/rest.ResponseCreateAccount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      security:
+      - BasicAuth:
+        - ""
+      summary: Create Merchant Account
+      tags:
+      - MerchantAccount
+    put:
+      consumes:
+      - application/json
+      description: Update Merchant Account By Id
+      parameters:
+      - description: Body Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UpdateMerchantAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseCreateAccount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Update Merchant Account By Id
+      tags:
+      - MerchantAccount
+  /v1/accounts/{account_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Merchant Account By Id
+      parameters:
+      - description: Merchant Account ID
+        in: path
+        name: account_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseCreateAccount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      security:
+      - BasicAuth:
+        - ""
+      summary: Delete Merchant Account By Id
+      tags:
+      - MerchantAccount
+  /v1/accounts/members:
+    get:
+      consumes:
+      - application/json
+      description: Get Merchant Members By Parameters
+      parameters:
+      - description: Merchant Member ID
+        in: query
+        name: id
+        type: integer
+      - description: Merchant Account ID
+        in: query
+        name: merchantId
+        type: integer
+      - description: Merchant Member Email
+        in: query
+        name: email
+        type: string
+      - description: Merchant Account Name
+        in: query
+        name: name
+        type: string
+      - description: ' '
+        in: query
+        name: page
+        type: integer
+      - description: ' '
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseGetMembers'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Get Merchant Members By Parameters
+      tags:
+      - MerchantMember
+    post:
+      consumes:
+      - application/json
+      description: Create Merchant Member
+      parameters:
+      - description: Body Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CreateMemberParam'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/rest.ResponseCreateMember'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Create Merchant Member
+      tags:
+      - MerchantMember
+    put:
+      consumes:
+      - application/json
+      description: Update Merchant Member By Id
+      parameters:
+      - description: Body Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UpdateMerchantMember'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseCreateMember'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Update Merchant Member By Id
+      tags:
+      - MerchantMember
+  /v1/accounts/members/{member_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Merchant Member By Id
+      parameters:
+      - description: Merchant Member ID
+        in: path
+        name: member_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseCreateAccount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Delete Merchant Member By Id
+      tags:
+      - MerchantMember
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

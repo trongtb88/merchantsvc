@@ -32,7 +32,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	var param entity.CreateMemberParam
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -40,7 +40,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.Unmarshal(body, &param); err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -50,7 +50,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	if (param.MerchantId == 0) ||
 		len(param.Email) == 0 ||
 		len(param.Name) == 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidParameter",
 			Message: "One of required field is empty",
 		})
@@ -62,7 +62,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(acc) == 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "NotFoundMerchantId",
 			Message: "Not Found Merchant Id, please choose other",
 		})
@@ -73,7 +73,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "CreateMemberError",
 			Message: err.Error(),
 		})
@@ -81,7 +81,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(member) > 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "DuplicateMemberEmail",
 			Message: "Please choose other member email",
 		})
@@ -89,7 +89,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !common.IsEmailValid(param.Email) {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidEmail",
 			Message: "Email is not valid",
 		})
@@ -98,7 +98,7 @@ func (rst *rest) CreateMerchantMember(w http.ResponseWriter, r *http.Request) {
 
 	m, err := rst.uc.Member.CreateMember(r.Context(), param)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "CreateMemberError",
 			Message: err.Error(),
 		})
@@ -129,7 +129,7 @@ func (rst *rest) GetMerchantMembers(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseForm()
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "GetMemberError",
 			Message: err.Error(),
 		})
@@ -141,7 +141,7 @@ func (rst *rest) GetMerchantMembers(w http.ResponseWriter, r *http.Request) {
 
 	err = decoderMember.Decode(&param, r.Form)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "GetMemberError",
 			Message: err.Error(),
 		})
@@ -151,7 +151,7 @@ func (rst *rest) GetMerchantMembers(w http.ResponseWriter, r *http.Request) {
 	members, pagination, err := rst.uc.Member.GetMembersByParam(r.Context(), param)
 
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "GetMemberError",
 			Message: err.Error(),
 		})
@@ -181,7 +181,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -189,7 +189,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.Unmarshal(body, &param); err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidJsonBodyRequest",
 			Message: err.Error(),
 		})
@@ -197,7 +197,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if param.Id <= 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidMemberId",
 			Message: "Invalid Member Id",
 		})
@@ -209,7 +209,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(memberById) == 0 {
-		rst.httpRespError(w, r, http.StatusNotFound, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusNotFound, entity.ErrorMessage{
 			Code:    "NotFoundMemberId",
 			Message: "We not found member Id",
 		})
@@ -227,7 +227,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 
 	if len(param.Email) > 0 {
 		if !common.IsEmailValid(param.Email) {
-			rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+			rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 				Code:    "InvalidEmailFormat",
 				Message: "Invalid Email Format",
 			})
@@ -239,7 +239,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 		})
 
 		if err != nil {
-			rst.httpRespError(w, r, http.StatusNotFound, ErrorMessage{
+			rst.httpRespError(w, r, http.StatusNotFound, entity.ErrorMessage{
 				Code:    "ErrorGetMemberByEmail",
 				Message: err.Error(),
 			})
@@ -247,7 +247,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if (len(memberByEmail) > 0) && memberByEmail[0].Id != param.Id {
-			rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+			rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 				Code:    "InvalidUpdateEmail",
 				Message: "Email already used by other member",
 			})
@@ -264,7 +264,7 @@ func (rst *rest) UpdateMerchantMember(w http.ResponseWriter, r *http.Request) {
 	members.MemberStatusInStr = common.FillStatusInStr(m.MemberStatus)
 
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "UpdateMemberError",
 			Message: err.Error(),
 		})
@@ -293,7 +293,7 @@ func (rst *rest) DeleteMerchantMember(w http.ResponseWriter, r *http.Request) {
 	idParam, _ := vars["member_id"]
 
 	if len(idParam) == 0 {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidMerchantMemberId",
 			Message: "Invalid Merchant Member Id",
 		})
@@ -301,7 +301,7 @@ func (rst *rest) DeleteMerchantMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if memberId, err = strconv.ParseInt(idParam, 10, 64); err != nil {
-		rst.httpRespError(w, r, http.StatusBadRequest, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusBadRequest, entity.ErrorMessage{
 			Code:    "InvalidMerchantMemberId",
 			Message: "Member Id must be number",
 		})
@@ -313,7 +313,7 @@ func (rst *rest) DeleteMerchantMember(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(membersById) == 0 {
-		rst.httpRespError(w, r, http.StatusNotFound, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusNotFound, entity.ErrorMessage{
 			Code:    "NotFoundMember",
 			Message: "Not Found Merchant Member",
 		})
@@ -333,7 +333,7 @@ func (rst *rest) DeleteMerchantMember(w http.ResponseWriter, r *http.Request) {
 
 	_, err = rst.uc.Member.UpdateMember(r.Context(), m)
 	if err != nil {
-		rst.httpRespError(w, r, http.StatusInternalServerError, ErrorMessage{
+		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "DeleteAccountsError",
 			Message: err.Error(),
 		})

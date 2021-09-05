@@ -1,0 +1,47 @@
+version: '3'
+services:
+  app:
+    container_name: merchant_app
+    build: .
+    ports:
+      - 8089:8089
+    restart: on-failure
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
+      - Meta_Namespace=${Meta_Namespace}
+      - Meta_Version=${Meta_Version}
+      - Meta_BasePath=${Meta_BasePath}
+      - Auth_Username=${Auth_Username}
+      - Auth_Password=${Auth_Password}
+    volumes:
+      - api:/usr/src/app/
+    depends_on:
+      - merchant-mysql
+    networks:
+      - merchantnetwork
+
+
+  merchant-mysql:
+    image: mysql:5.7
+    container_name: merchant_db_mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_HOST=${DB_HOST}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - database_mysql:/var/lib/mysql
+    networks:
+      - merchantnetwork
+
+volumes:
+  api:
+  database_mysql:
+
+networks:
+  merchantnetwork:
+    driver: bridge
+
