@@ -82,13 +82,20 @@ merchant_app      | 2021/09/05 02:22:12 Starting server at port:  8089
 ## How to test this service
 ### Tesing by command
 At root folder of project, run all ingtegration tests
+**You must using localhost to run test**
+Uncomment all values for localhost at .env file
 ```
 go test ./src/handler/rest
+Return like below means pass all tests
+
+ go test ./src/handler/rest 
+ok      github.com/trongtb88/merchantsvc/src/handler/rest       3.633s
+
 ```
 ### Testing using swagger
 1. Access this page to see API documentation
    http://localhost:8089/swagger/index.html#
-2. **At swagger page, Click button Authorize, input Auth.usename, Auth.password in .env file and click Authorize**
+2. **At swagger page, Click button Authorize, input Auth_usename, Auth_password in .env file and click Authorize**
 3. Call APIs at this page, and if return 200, that means API worked fine.
 
 ### Testing using Posman
@@ -147,12 +154,13 @@ curl --location --request POST 'http://localhost:8089/v1/accounts' \
 }
 ```
 ## Improve
-#### Develop end-point to Authorize when click button Authorize at Swagger
+#### Develop endpoint to Authorize when click button Authorize at Swagger
 #### using JWT with expired token
 #### Build more real authentication flow
 #### Build dynamic sql before put to gorm or sql
 #### Logger
 #### Add request_id or correlation_id to trace request
 #### Add some telemetry to monitors
+#### Build CI Pipeline to deploy using Jenkin
 
 
