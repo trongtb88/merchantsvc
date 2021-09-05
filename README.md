@@ -22,7 +22,9 @@
     2021/09/05 08:45:17 Generating entity.UpdateMerchantAccount
     2021/09/05 08:45:17 Generating entity.UpdateMerchantMember
 ```
-
+9. FE can access this page to see API documentation
+   http://localhost:8089/swagger/index.html#
+   ![API documentation swagger](https://i.im.ge/2021/09/05/QSe4Tz.png)
 
 ## How to run this service at docker
 1. Run DOCKER DEAMON at your machine successfully
@@ -93,7 +95,7 @@ ok      github.com/trongtb88/merchantsvc/src/handler/rest       3.633s
 
 ```
 ### Testing using swagger
-1. Access this page to see API documentation
+1. FE can access this page to see API documentation
    http://localhost:8089/swagger/index.html#
    ![API documentation swagger](https://i.im.ge/2021/09/05/QSe4Tz.png)
 
