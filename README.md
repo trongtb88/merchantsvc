@@ -95,6 +95,8 @@ ok      github.com/trongtb88/merchantsvc/src/handler/rest       3.633s
 ### Testing using swagger
 1. Access this page to see API documentation
    http://localhost:8089/swagger/index.html#
+   ![API documentation swagger](https://i.im.ge/2021/09/05/QSe4Tz.png)
+
 2. **At swagger page, Click button Authorize, input Auth_usename, Auth_password in .env file and click Authorize**
 3. Call APIs at this page, and if return 200, that means API worked fine.
 
