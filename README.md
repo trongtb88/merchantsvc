@@ -105,9 +105,9 @@ ok      github.com/trongtb88/merchantsvc/src/handler/rest       3.633s
 3. Call APIs at this page, and if return 200, that means API worked fine.
 
 ### Testing using Postman
-1. Import like below, note we are using Basic Authorization, you must use value Auth_usename, Auth_password which are defined 
+1. Import like below, note we are using Basic Authorization, you must use values Auth_usename, Auth_password which are defined 
    in .env file
-2. Token = Encode_Base64(Auth.username:Auth.password)
+2. Token = Encode_Base64(Auth_username:Auth_password)
 ```
     For example :  Encode_Base64(abc:123) = YWJjOjEyMw==
 ```
