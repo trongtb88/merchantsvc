@@ -1,9 +1,10 @@
 ## How to run this service at localhost
 1. Start your mysql at your localhost machine successfully
 2. Git clone this repo
-3. **Change file .env which is mapped with your config (DB_USER, DB_PASSWORD, DB_HOST, SERVER_PORT)**
+3. **Change values in file .env which are mapped with your config (DB_USER, DB_PASSWORD, DB_HOST, SERVER_PORT)**
 4. **Change DB_HOST value to 127.0.0.1**
-5. Note we set Auth_usename, Auth_password at env file to authenticate APIs
+5. Note we set Auth_usename, Auth_password at env file to authenticate APIs, you can check values, 
+   but remember using it to auth APIs before use
 6. **Create database merchant_db by yourself**
 7.  Go to terminal at root of project
 ```sh
@@ -83,7 +84,7 @@ merchant_app      | 2021/09/05 02:22:12 Starting server at port:  8089
 ```
 
 ## How to test this service
-### Tesing by command
+### Testing by run integration tests
 At root folder of project, run all ingtegration tests
 **You must using localhost to run test**
 Uncomment all values for localhost at .env file
@@ -103,8 +104,9 @@ ok      github.com/trongtb88/merchantsvc/src/handler/rest       3.633s
 2. **At swagger page, Click button Authorize, input Auth_usename, Auth_password in .env file and click Authorize**
 3. Call APIs at this page, and if return 200, that means API worked fine.
 
-### Testing using Posman
-1. Import like below, note we are using Basic Authorization, you can using value define in .env file
+### Testing using Postman
+1. Import like below, note we are using Basic Authorization, you must use value Auth_usename, Auth_password which are defined 
+   in .env file
 2. Token = Encode_Base64(Auth.username:Auth.password)
 ```
     For example :  Encode_Base64(abc:123) = YWJjOjEyMw==
@@ -159,10 +161,10 @@ curl --location --request POST 'http://localhost:8089/v1/accounts' \
 }
 ```
 ## Improve
-#### Develop endpoint to Authorize when click button Authorize at Swagger
+#### Develop API to Authorize when click button Authorize at Swagger
 #### using JWT with expired token
 #### Build more real authentication flow
-#### Build dynamic sql before put to gorm or sql
+#### Build dynamic sql before put to gorm or sql library
 #### Logger
 #### Add request_id or correlation_id to trace request
 #### Add some telemetry to monitors
