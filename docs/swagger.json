@@ -1,8 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {},
-        "license": {}
+        "contact": {}
     },
     "paths": {
         "/v1/accounts": {
@@ -475,9 +474,152 @@
                     }
                 }
             }
+        },
+        "/v1/support/pre-define-questions-for-authentication": {
+            "get": {
+                "description": "Get Predefine questions for authentication user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CustomerSupport"
+                ],
+                "summary": "Get Predefine questions for authentication user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rest.ResponseGetPredefineQuestionForAuthentication"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/support/pre-define-questions-for-business": {
+            "get": {
+                "description": "Get Predefine questions for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CustomerSupport"
+                ],
+                "summary": "Get Predefine questions for user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rest.ResponseGetPredefineQuestionForBusiness"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/support/submit-questions-for-answer": {
+            "post": {
+                "description": "Submit Question for Anwser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CustomerSupport"
+                ],
+                "summary": "Submit Question for Anwser",
+                "parameters": [
+                    {
+                        "description": "Body Request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Question"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/rest.ResponseAnswerForQuestion"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest.HTTPErrResp"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "entity.Answer": {
+            "type": "object",
+            "properties": {
+                "content": {},
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.CreateAccountParam": {
             "type": "object",
             "properties": {
@@ -590,7 +732,6 @@
                     "type": "string"
                 },
                 "merchant": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.MerchantAccount"
                 },
                 "updated_at": {
@@ -602,7 +743,6 @@
             "type": "object",
             "properties": {
                 "error": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.ErrorMessage"
                 },
                 "path": {
@@ -646,6 +786,69 @@
                 }
             }
         },
+        "entity.Parameter": {
+            "type": "object",
+            "properties": {
+                "isRequired": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Question": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "function": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Parameter"
+                    }
+                },
+                "questionType": {
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.QuestionForAuthentication": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "field": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isRequired": {
+                    "type": "boolean"
+                },
+                "questionType": {
+                    "type": "string"
+                },
+                "supportOTP": {
+                    "type": "boolean"
+                }
+            }
+        },
         "entity.UpdateMerchantAccount": {
             "type": "object",
             "properties": {
@@ -678,7 +881,17 @@
             "type": "object",
             "properties": {
                 "metadata": {
-                    "type": "object",
+                    "$ref": "#/definitions/entity.Meta"
+                }
+            }
+        },
+        "rest.ResponseAnswerForQuestion": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/entity.Answer"
+                },
+                "metadata": {
                     "$ref": "#/definitions/entity.Meta"
                 }
             }
@@ -687,11 +900,9 @@
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.MerchantAccount"
                 },
                 "metadata": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.Meta"
                 }
             }
@@ -700,11 +911,9 @@
             "type": "object",
             "properties": {
                 "data": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.MerchantMember"
                 },
                 "metadata": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.Meta"
                 }
             }
@@ -719,11 +928,9 @@
                     }
                 },
                 "metadata": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.Meta"
                 },
                 "pagination": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.Pagination"
                 }
             }
@@ -738,12 +945,38 @@
                     }
                 },
                 "metadata": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.Meta"
                 },
                 "pagination": {
-                    "type": "object",
                     "$ref": "#/definitions/entity.Pagination"
+                }
+            }
+        },
+        "rest.ResponseGetPredefineQuestionForAuthentication": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.QuestionForAuthentication"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/entity.Meta"
+                }
+            }
+        },
+        "rest.ResponseGetPredefineQuestionForBusiness": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Question"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/entity.Meta"
                 }
             }
         }

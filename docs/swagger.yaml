@@ -1,4 +1,10 @@
 definitions:
+  entity.Answer:
+    properties:
+      content: {}
+      id:
+        type: string
+    type: object
   entity.CreateAccountParam:
     properties:
       merchant_code:
@@ -76,7 +82,6 @@ definitions:
         type: string
       merchant:
         $ref: '#/definitions/entity.MerchantAccount'
-        type: object
       updated_at:
         type: string
     type: object
@@ -84,7 +89,6 @@ definitions:
     properties:
       error:
         $ref: '#/definitions/entity.ErrorMessage'
-        type: object
       path:
         type: string
       status:
@@ -112,6 +116,47 @@ definitions:
       total_pages:
         type: integer
     type: object
+  entity.Parameter:
+    properties:
+      isRequired:
+        type: boolean
+      name:
+        type: string
+      value:
+        type: string
+    type: object
+  entity.Question:
+    properties:
+      content:
+        type: string
+      function:
+        type: string
+      id:
+        type: string
+      parameters:
+        items:
+          $ref: '#/definitions/entity.Parameter'
+        type: array
+      questionType:
+        type: string
+      topic:
+        type: string
+    type: object
+  entity.QuestionForAuthentication:
+    properties:
+      content:
+        type: string
+      field:
+        type: string
+      id:
+        type: string
+      isRequired:
+        type: boolean
+      questionType:
+        type: string
+      supportOTP:
+        type: boolean
+    type: object
   entity.UpdateMerchantAccount:
     properties:
       id:
@@ -134,25 +179,27 @@ definitions:
     properties:
       metadata:
         $ref: '#/definitions/entity.Meta'
-        type: object
+    type: object
+  rest.ResponseAnswerForQuestion:
+    properties:
+      data:
+        $ref: '#/definitions/entity.Answer'
+      metadata:
+        $ref: '#/definitions/entity.Meta'
     type: object
   rest.ResponseCreateAccount:
     properties:
       data:
         $ref: '#/definitions/entity.MerchantAccount'
-        type: object
       metadata:
         $ref: '#/definitions/entity.Meta'
-        type: object
     type: object
   rest.ResponseCreateMember:
     properties:
       data:
         $ref: '#/definitions/entity.MerchantMember'
-        type: object
       metadata:
         $ref: '#/definitions/entity.Meta'
-        type: object
     type: object
   rest.ResponseGetAccounts:
     properties:
@@ -162,10 +209,8 @@ definitions:
         type: array
       metadata:
         $ref: '#/definitions/entity.Meta'
-        type: object
       pagination:
         $ref: '#/definitions/entity.Pagination'
-        type: object
     type: object
   rest.ResponseGetMembers:
     properties:
@@ -175,14 +220,29 @@ definitions:
         type: array
       metadata:
         $ref: '#/definitions/entity.Meta'
-        type: object
       pagination:
         $ref: '#/definitions/entity.Pagination'
-        type: object
+    type: object
+  rest.ResponseGetPredefineQuestionForAuthentication:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entity.QuestionForAuthentication'
+        type: array
+      metadata:
+        $ref: '#/definitions/entity.Meta'
+    type: object
+  rest.ResponseGetPredefineQuestionForBusiness:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entity.Question'
+        type: array
+      metadata:
+        $ref: '#/definitions/entity.Meta'
     type: object
 info:
   contact: {}
-  license: {}
 paths:
   /v1/accounts:
     get:
@@ -490,6 +550,94 @@ paths:
       summary: Delete Merchant Member By Id
       tags:
       - MerchantMember
+  /v1/support/pre-define-questions-for-authentication:
+    get:
+      consumes:
+      - application/json
+      description: Get Predefine questions for authentication user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseGetPredefineQuestionForAuthentication'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Get Predefine questions for authentication user
+      tags:
+      - CustomerSupport
+  /v1/support/pre-define-questions-for-business:
+    get:
+      consumes:
+      - application/json
+      description: Get Predefine questions for user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.ResponseGetPredefineQuestionForBusiness'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Get Predefine questions for user
+      tags:
+      - CustomerSupport
+  /v1/support/submit-questions-for-answer:
+    post:
+      consumes:
+      - application/json
+      description: Submit Question for Anwser
+      parameters:
+      - description: Body Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Question'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/rest.ResponseAnswerForQuestion'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.HTTPErrResp'
+      summary: Submit Question for Anwser
+      tags:
+      - CustomerSupport
 securityDefinitions:
   BasicAuth:
     type: basic

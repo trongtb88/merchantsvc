@@ -35,6 +35,21 @@ type ResponseGetMembers struct {
 	Pagination entity.Pagination           `json:"pagination"`
 }
 
+type ResponseGetPredefineQuestionForAuthentication struct {
+	Meta entity.Meta                        `json:"metadata"`
+	Data []entity.QuestionForAuthentication `json:"data"`
+}
+
+type ResponseGetPredefineQuestionForBusiness struct {
+	Meta entity.Meta       `json:"metadata"`
+	Data []entity.Question `json:"data"`
+}
+
+type ResponseAnswerForQuestion struct {
+	Meta entity.Meta   `json:"metadata"`
+	Data entity.Answer `json:"data"`
+}
+
 type HTTPErrResp struct {
 	Meta entity.Meta `json:"metadata"`
 }

@@ -16,25 +16,23 @@ type REST interface{}
 var once = &sync.Once{}
 
 type rest struct {
-	mux    *mux.Router
-	uc     *usecase.Usecase
+	mux *mux.Router
+	uc  *usecase.Usecase
 }
 
 func Init(router *mux.Router, uc *usecase.Usecase) REST {
 	var e *rest
 	once.Do(func() {
 		e = &rest{
-			mux:    router,
-			uc:     uc,
+			mux: router,
+			uc:  uc,
 		}
 		e.Serve()
 	})
 	return e
 }
 
-
 func (rst *rest) Serve() {
-
 
 	rst.mux.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -52,6 +50,8 @@ func (rst *rest) Serve() {
 	rst.mux.HandleFunc("/v1/accounts/members", middleware.Authenticate(rst.UpdateMerchantMember)).Methods(http.MethodPut)
 	rst.mux.HandleFunc("/v1/accounts/members/{member_id}", middleware.Authenticate(rst.DeleteMerchantMember)).Methods(http.MethodDelete)
 
+	rst.mux.HandleFunc("/v1/support/pre-define-questions-for-authentication", rst.GetPredefineQuestionForAuthentication).Methods(http.MethodGet)
+	rst.mux.HandleFunc("/v1/support/pre-define-questions-for-business", rst.GetPredefineQuestionForBusiness).Methods(http.MethodGet)
+	rst.mux.HandleFunc("/v1/support/submit-questions-for-answer", rst.SubmitQuestionForAnswer).Methods(http.MethodPost)
 	rst.mux.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 }
-

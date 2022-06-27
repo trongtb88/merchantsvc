@@ -4,11 +4,13 @@ import (
 	"github.com/trongtb88/merchantsvc/src/business/domain"
 	"github.com/trongtb88/merchantsvc/src/business/usecase/account"
 	"github.com/trongtb88/merchantsvc/src/business/usecase/member"
+	"github.com/trongtb88/merchantsvc/src/business/usecase/question"
 )
 
 type Usecase struct {
-	Account account.Usecaseitf
-	Member member.Usecaseitf
+	Account  account.Usecaseitf
+	Member   member.Usecaseitf
+	Question question.Usecaseitf
 }
 
 // Init all usecase
@@ -23,6 +25,9 @@ func Init(
 		Member: member.InitMember(
 			dom.Member,
 			dom.Account,
+		),
+		Question: question.InitQuestion(
+			dom.Question,
 		),
 	}
 }
