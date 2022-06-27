@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"os"
 
-	resthandler "github.com/trongtb88/merchantsvc/src/handler/rest"
 	"github.com/trongtb88/merchantsvc/docs"
+	resthandler "github.com/trongtb88/merchantsvc/src/handler/rest"
 	// Business Layer Dep
 	domain "github.com/trongtb88/merchantsvc/src/business/domain"
 	usecase "github.com/trongtb88/merchantsvc/src/business/usecase"
@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	sqlClient0     *gorm.DB
+	sqlClient0 *gorm.DB
 
 	// Server Infrastructure
 
@@ -32,7 +32,6 @@ var (
 // @in header
 // @name Authorization
 func main() {
-
 
 	// loads values from .env into the system
 	if err := godotenv.Load(); err != nil {
@@ -47,7 +46,7 @@ func main() {
 		fmt.Println("We are getting the env values")
 	}
 
-	db := db.ConnectDB (
+	db := db.ConnectDB(
 		os.Getenv("DB_DRIVER"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -61,7 +60,10 @@ func main() {
 	)
 	uc = usecase.Init(dom)
 
-	serverPort := os.Getenv("SERVER_PORT")
+	serverPort := os.Getenv("PORT")
+	if serverPort == "" {
+		serverPort = "8089"
+	}
 
 	router := mux.NewRouter()
 
@@ -72,7 +74,7 @@ func main() {
 	docs.SwaggerInfo.Host = os.Getenv("Meta_Host")
 
 	// REST Handler Initialization
-	_ = resthandler.Init(router,  uc)
+	_ = resthandler.Init(router, uc)
 
 	log.Println("Starting server at port: ", serverPort)
 
@@ -80,8 +82,5 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-
-
-
 
 }
