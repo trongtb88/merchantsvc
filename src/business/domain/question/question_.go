@@ -10,9 +10,8 @@ import (
 
 const (
 	GetDetailLoansByMemberID    = "GetDetailLoansByMemberID"
-	GetNextPaymentSchedulerDate = "GetNextPaymentSchedulerDate"
-	GetTotalPaymentScheduler    = "GetTotalPaymentScheduler"
-	GetRepaymentScheduler       = "GetRepaymentScheduler"
+	GetNextPaymentSchedulerInfo = "GetNextPaymentSchedulerInfo"
+	GetTotalRemainingPrincipal  = "GetTotalRemainingPrincipal"
 )
 
 func (q question) GetPredefineQuestionsForAuthenticate(ctx context.Context) ([]entity.QuestionForAuthentication, error) {
@@ -95,14 +94,6 @@ func (q question) GetPredefineQuestionsForLoan(ctx context.Context) ([]entity.Qu
 		Function:     "GetTotalRemainingPrincipal",
 		Parameters:   q.getParametersForGetDetailLoan(ctx),
 	})
-	questions = append(questions, entity.Question{
-		Id:           uuid.New(),
-		Content:      "Give me the next payment scheduler of loan ?",
-		QuestionType: "quires",
-		Topic:        "loan",
-		Function:     "GetRepaymentScheduler",
-		Parameters:   q.getParametersForGetDetailLoan(ctx),
-	})
 	return questions, nil
 }
 
@@ -135,7 +126,10 @@ func (q question) SubmitQuestionForAnswer(ctx context.Context, question entity.Q
 		answer.Content = loans
 		answer.Id = uuid.New()
 		return answer, nil
+	case GetNextPaymentSchedulerInfo:
+
 	}
+
 	return answer, nil
 }
 
