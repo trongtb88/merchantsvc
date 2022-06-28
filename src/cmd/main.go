@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 
 	"gorm.io/gorm"
 	"log"
@@ -65,6 +66,11 @@ func main() {
 		serverPort = "8089"
 	}
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+	})
+
 	router := mux.NewRouter()
 
 	docs.SwaggerInfo.Title = os.Getenv("Meta_Namespace")
@@ -76,9 +82,11 @@ func main() {
 	// REST Handler Initialization
 	_ = resthandler.Init(router, uc)
 
+	handler := c.Handler(router)
+
 	log.Println("Starting server at port: ", serverPort)
 
-	err = http.ListenAndServe(":"+serverPort, router)
+	err = http.ListenAndServe(":"+serverPort, handler)
 	if err != nil {
 		log.Println(err)
 	}

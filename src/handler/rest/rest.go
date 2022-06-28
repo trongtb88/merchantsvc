@@ -1,13 +1,13 @@
 package rest
 
 import (
-	"github.com/trongtb88/merchantsvc/src/middleware"
 	"net/http"
 	"sync"
 
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"github.com/trongtb88/merchantsvc/src/business/usecase"
+	"github.com/trongtb88/merchantsvc/src/middleware"
 )
 
 // REST rest interface
