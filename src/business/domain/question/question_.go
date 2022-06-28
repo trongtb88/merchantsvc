@@ -46,7 +46,7 @@ func (q question) GetPredefineQuestionsForAuthenticate(ctx context.Context) ([]e
 		"QuestionType" : "textbox",
 		"IsRequired": true,
 		"SupportOTP": true,
-		"Field" : "email"
+		"Field" : "phoneNumber"
 	}
 ]`
 
@@ -105,7 +105,7 @@ func (q question) GetPredefineQuestionsForLoan(ctx context.Context) ([]entity.Qu
 	})
 	questions = append(questions, entity.Question{
 		Id:           uuid.New(),
-		Content:      "Give me the payment scheduler of loan ?",
+		Content:      "Give me the next payment scheduler of loan ?",
 		QuestionType: "quires",
 		Topic:        "loan",
 		Function:     "GetRepaymentScheduler",
