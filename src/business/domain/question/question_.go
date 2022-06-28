@@ -81,18 +81,10 @@ func (q question) GetPredefineQuestionsForLoan(ctx context.Context) ([]entity.Qu
 	})
 	questions = append(questions, entity.Question{
 		Id:           uuid.New(),
-		Content:      "Give me next payment scheduler date  ?",
+		Content:      "Give me next payment scheduler information ?",
 		QuestionType: "quires",
 		Topic:        "loan",
-		Function:     "GetNextPaymentSchedulerDate",
-		Parameters:   q.getParametersForGetDetailLoan(ctx),
-	})
-	questions = append(questions, entity.Question{
-		Id:           uuid.New(),
-		Content:      "Give me amount money of next payment I have to pay ?",
-		QuestionType: "quires",
-		Topic:        "loan",
-		Function:     "GetTotalPaymentScheduler",
+		Function:     "GetNextPaymentSchedulerInfo",
 		Parameters:   q.getParametersForGetDetailLoan(ctx),
 	})
 	questions = append(questions, entity.Question{
