@@ -88,7 +88,7 @@ func (rst *rest) SubmitQuestionForAnswer(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	answer, err := rst.uc.Question.SubmitQuestionForAnswer(r.Context(), question)
+	answer, err := rst.uc.Answer.SubmitQuestionForAnswer(r.Context(), question)
 	if err != nil {
 		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "GetPredefineQuestionsForBusiness",

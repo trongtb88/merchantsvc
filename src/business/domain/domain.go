@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/trongtb88/merchantsvc/src/business/domain/account"
+	"github.com/trongtb88/merchantsvc/src/business/domain/answer"
 	"github.com/trongtb88/merchantsvc/src/business/domain/member"
 	"github.com/trongtb88/merchantsvc/src/business/domain/question"
 	"gorm.io/gorm"
@@ -11,6 +12,7 @@ type Domain struct {
 	Account  account.DomainItf
 	Member   member.DomainItf
 	Question question.DomainItf
+	Answer   answer.DomainItf
 }
 
 func Init(

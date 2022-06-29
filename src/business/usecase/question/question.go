@@ -10,7 +10,6 @@ import (
 type Usecaseitf interface {
 	GetPredefineQuestionsForAuthenticate(ctx context.Context) ([]entity.QuestionForAuthentication, error)
 	GetPredefineQuestionsForBusiness(ctx context.Context, topic string) ([]entity.Question, error)
-	SubmitQuestionForAnswer(ctx context.Context, question entity.Question) (entity.Answer, error)
 }
 
 type questionUc struct {

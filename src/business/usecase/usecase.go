@@ -3,6 +3,7 @@ package usecase
 import (
 	"github.com/trongtb88/merchantsvc/src/business/domain"
 	"github.com/trongtb88/merchantsvc/src/business/usecase/account"
+	"github.com/trongtb88/merchantsvc/src/business/usecase/answer"
 	"github.com/trongtb88/merchantsvc/src/business/usecase/member"
 	"github.com/trongtb88/merchantsvc/src/business/usecase/question"
 )
@@ -11,6 +12,7 @@ type Usecase struct {
 	Account  account.Usecaseitf
 	Member   member.Usecaseitf
 	Question question.Usecaseitf
+	Answer   answer.Usecaseitf
 }
 
 // Init all usecase
@@ -28,6 +30,9 @@ func Init(
 		),
 		Question: question.InitQuestion(
 			dom.Question,
+		),
+		Answer: answer.InitAnswer(
+			dom.Answer,
 		),
 	}
 }
