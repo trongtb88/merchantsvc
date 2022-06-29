@@ -8,7 +8,7 @@ type PendingTransaction struct {
 	TransactionId uuid.UUID
 	WithdrawDate  string
 	Status        string
-	BankAccount   int64
+	BankAccount   string
 	BankName      string
 	PendingReason string
 }

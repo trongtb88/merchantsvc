@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	GetDetailLoansByMemberID    = "GetDetailLoansByMemberID"
-	GetNextPaymentSchedulerInfo = "GetNextPaymentSchedulerInfo"
-	GetTotalRemainingPrincipal  = "GetTotalRemainingPrincipal"
-	ReportFakeAccount           = "ReportFakeAccount"
+	GetDetailLoansByMemberID            = "GetDetailLoansByMemberID"
+	GetNextPaymentSchedulerInfo         = "GetNextPaymentSchedulerInfo"
+	GetTotalRemainingPrincipal          = "GetTotalRemainingPrincipal"
+	ReportFakeAccount                   = "ReportFakeAccount"
+	GetPendingTransactionForBankAccount = "GetPendingTransactionForBankAccount"
 )
 
 func (a answerUc) SubmitQuestionForAnswer(ctx context.Context, question entity.Question) (entity.Answer, error) {
@@ -43,7 +44,33 @@ func (a answerUc) SubmitQuestionForAnswer(ctx context.Context, question entity.Q
 		answer.Id = uuid.New()
 		return answer, nil
 	case ReportFakeAccount:
-		answer.Content = "Thank you for your report, we already received your information and will response you within 3 working days"
+		answer.Content = "Please fill bank account detail report base on template \n Input bank account number : \n Input bank account name : \n Input bank name : "
+		answer.Id = uuid.New()
+		return answer, nil
+	case GetPendingTransactionForBankAccount:
+		var pendingTransactions []entity.PendingTransaction
+		pendingTransaction1 := entity.PendingTransaction{
+			TransactionId: uuid.New(),
+			WithdrawDate:  "2022-06-15 14:45:12",
+			Status:        "pending",
+			BankAccount:   "10000100005678",
+			BankName:      "OCB",
+			PendingReason: "Not enough money to draw",
+		}
+
+		pendingTransaction2 := entity.PendingTransaction{
+			TransactionId: uuid.New(),
+			WithdrawDate:  "2022-06-20 14:45:12",
+			Status:        "pending",
+			BankAccount:   "10000100005678",
+			BankName:      "OCB",
+			PendingReason: "Can not withdrawl because you already paid all for last payment schedule",
+		}
+
+		pendingTransactions = append(pendingTransactions, pendingTransaction1)
+		pendingTransactions = append(pendingTransactions, pendingTransaction2)
+
+		answer.Content = pendingTransactions
 		answer.Id = uuid.New()
 		return answer, nil
 	}
