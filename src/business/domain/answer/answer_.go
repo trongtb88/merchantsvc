@@ -10,7 +10,7 @@ import (
 const (
 	GetDetailLoansByMemberID    = "GetDetailLoansByMemberID"
 	GetNextPaymentSchedulerInfo = "GetNextPaymentSchedulerInfo"
-	GetTotalRemainingPrincipal  = "GetTotalRemainingPrincipal"
+	GetRemainingTotalAmount     = "GetRemainingTotalAmount"
 )
 
 func (a answer) SubmitQuestionForAnswer(ctx context.Context, question entity.Question) (entity.Answer, error) {
