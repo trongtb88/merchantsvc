@@ -9,9 +9,10 @@ import (
 )
 
 const (
-	GetDetailLoansByMemberID    = "GetDetailLoansByMemberID"
-	GetNextPaymentSchedulerInfo = "GetNextPaymentSchedulerInfo"
-	GetRemainingPrincipalAmount = "GetRemainingTotalAmount"
+	GetDetailLoansByMemberID            = "GetDetailLoansByMemberID"
+	GetNextPaymentSchedulerInfo         = "GetNextPaymentSchedulerInfo"
+	GetRemainingPrincipalAmount         = "GetRemainingTotalAmount"
+	GetPendingTransactionForBankAccount = "GetPendingTransactionForBankAccount"
 )
 
 func (a answer) SubmitQuestionForAnswer(ctx context.Context, question entity.Question) (entity.Answer, error) {
@@ -39,6 +40,14 @@ func (a answer) SubmitQuestionForAnswer(ctx context.Context, question entity.Que
 			return answer, err
 		}
 		answer.Content = totalRemainingPrincipal
+		answer.Id = uuid.New()
+		return answer, nil
+	case GetPendingTransactionForBankAccount:
+		pendingTransaction, err := a.getPendingTransactionForBankAccount(question.Parameters)
+		if err != nil {
+			return answer, err
+		}
+		answer.Content = pendingTransaction
 		answer.Id = uuid.New()
 		return answer, nil
 	}
@@ -110,6 +119,29 @@ func (a answer) getTotalRemainingPrincipal(parameters []entity.Parameter) ([]ent
 		Curreny:              "SGD",
 	}
 	var result []entity.PrincipalAmount
+	result = append(result, loan1)
+	result = append(result, loan2)
+	return result, nil
+}
+
+func (a answer) getPendingTransactionForBankAccount(parameters []entity.Parameter) ([]entity.PendingTransaction, error) {
+	loan1 := entity.PendingTransaction{
+		TransactionId: uuid.New(),
+		WithdrawDate:  "2022-06-10 14:00:00",
+		Status:        "Pending",
+		BankAccount:   0003433333,
+		BankName:      "OCB",
+		PendingReason: "Not enough money in your account",
+	}
+	loan2 := entity.PendingTransaction{
+		TransactionId: uuid.New(),
+		WithdrawDate:  "2022-06-20 14:00:00",
+		Status:        "Pending",
+		BankAccount:   0003433333,
+		BankName:      "OCB",
+		PendingReason: "Not enough money in your account",
+	}
+	var result []entity.PendingTransaction
 	result = append(result, loan1)
 	result = append(result, loan2)
 	return result, nil

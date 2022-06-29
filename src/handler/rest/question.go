@@ -2,9 +2,10 @@ package rest
 
 import (
 	"encoding/json"
-	"github.com/trongtb88/merchantsvc/src/business/entity"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/trongtb88/merchantsvc/src/business/entity"
 )
 
 // GetPredefineQuestionForAuthentication Get Predefine questions for authentication user godoc
@@ -44,7 +45,7 @@ func (rst *rest) GetPredefineQuestionForAuthentication(w http.ResponseWriter, r 
 // @Failure 500 {object} rest.HTTPErrResp
 // @Router /v1/support/pre-define-questions-for-business [get]
 func (rst *rest) GetPredefineQuestionForBusiness(w http.ResponseWriter, r *http.Request) {
-
+	// support query parameter topic=loan or bank_account
 	questions, err := rst.uc.Question.GetPredefineQuestionsForBusiness(r.Context(), "loan")
 	if err != nil {
 		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{

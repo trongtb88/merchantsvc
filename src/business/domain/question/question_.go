@@ -3,6 +3,7 @@ package question
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/google/uuid"
 	"github.com/trongtb88/merchantsvc/src/business/entity"
 )
@@ -57,6 +58,8 @@ func (q question) GetPredefineQuestionsForBusiness(ctx context.Context, topic st
 	switch topic {
 	case "loan":
 		return q.GetPredefineQuestionsForLoan(ctx)
+	case "bank_account":
+		return q.GetPredefineQuestionsForBankAccount(ctx)
 	}
 	return []entity.Question{}, nil
 }
@@ -103,6 +106,46 @@ func (q question) getParametersForGetDetailLoan(ctx context.Context) []entity.Pa
 	var parameters []entity.Parameter
 	parameters = append(parameters, entity.Parameter{
 		Name:       "loan_id",
+		IsRequired: true,
+	})
+	return parameters
+}
+
+// Bank account
+func (q question) GetPredefineQuestionsForBankAccount(ctx context.Context) ([]entity.Question, error) {
+	var questions []entity.Question
+	questions = append(questions, entity.Question{
+		Id:           uuid.New(),
+		Content:      "I want to report fake bank account",
+		QuestionType: "submit",
+		Topic:        "bank_account",
+		Function:     "ReportFakeAccount",
+		Parameters:   q.getParametersForFakeBankAccount(ctx),
+	})
+	questions = append(questions, entity.Question{
+		Id:           uuid.New(),
+		Content:      "I want to see my pending withdrawals transaction for bank account",
+		QuestionType: "queries",
+		Topic:        "bank_account",
+		Function:     "GetPendingTransactionForBankAccount",
+		Parameters:   q.getParametersForTransactionBankAccount(ctx),
+	})
+	return questions, nil
+}
+
+func (q question) getParametersForFakeBankAccount(ctx context.Context) []entity.Parameter {
+	var parameters []entity.Parameter
+	parameters = append(parameters, entity.Parameter{
+		Name:       "bank_account",
+		IsRequired: true,
+	})
+	return parameters
+}
+
+func (q question) getParametersForTransactionBankAccount(ctx context.Context) []entity.Parameter {
+	var parameters []entity.Parameter
+	parameters = append(parameters, entity.Parameter{
+		Name:       "bank_account",
 		IsRequired: true,
 	})
 	return parameters
