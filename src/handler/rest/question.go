@@ -46,7 +46,9 @@ func (rst *rest) GetPredefineQuestionForAuthentication(w http.ResponseWriter, r 
 // @Router /v1/support/pre-define-questions-for-business [get]
 func (rst *rest) GetPredefineQuestionForBusiness(w http.ResponseWriter, r *http.Request) {
 	// support query parameter topic=loan or bank_account
-	questions, err := rst.uc.Question.GetPredefineQuestionsForBusiness(r.Context(), "loan")
+	params := r.URL.Query()
+	topicName := params.Get("topic")
+	questions, err := rst.uc.Question.GetPredefineQuestionsForBusiness(r.Context(), topicName)
 	if err != nil {
 		rst.httpRespError(w, r, http.StatusInternalServerError, entity.ErrorMessage{
 			Code:    "GetPredefineQuestionsForBusiness",
