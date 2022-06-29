@@ -12,6 +12,7 @@ const (
 	GetDetailLoansByMemberID    = "GetDetailLoansByMemberID"
 	GetNextPaymentSchedulerInfo = "GetNextPaymentSchedulerInfo"
 	GetTotalRemainingPrincipal  = "GetTotalRemainingPrincipal"
+	ReportFakeAccount           = "ReportFakeAccount"
 )
 
 func (a answerUc) SubmitQuestionForAnswer(ctx context.Context, question entity.Question) (entity.Answer, error) {
@@ -39,6 +40,10 @@ func (a answerUc) SubmitQuestionForAnswer(ctx context.Context, question entity.Q
 			return answer, err
 		}
 		answer.Content = totalRemainingPrincipal
+		answer.Id = uuid.New()
+		return answer, nil
+	case ReportFakeAccount:
+		answer.Content = "Thank you for your report, we already received your information and will response you within 3 working days"
 		answer.Id = uuid.New()
 		return answer, nil
 	}
