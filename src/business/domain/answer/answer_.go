@@ -129,7 +129,7 @@ func (a answer) getPendingTransactionForBankAccount(parameters []entity.Paramete
 		TransactionId: uuid.New(),
 		WithdrawDate:  "2022-06-10 14:00:00",
 		Status:        "Pending",
-		BankAccount:   0003433333,
+		BankAccount:   "0003433333",
 		BankName:      "OCB",
 		PendingReason: "Not enough money in your account",
 	}
@@ -137,7 +137,7 @@ func (a answer) getPendingTransactionForBankAccount(parameters []entity.Paramete
 		TransactionId: uuid.New(),
 		WithdrawDate:  "2022-06-20 14:00:00",
 		Status:        "Pending",
-		BankAccount:   0003433333,
+		BankAccount:   "0003433333",
 		BankName:      "OCB",
 		PendingReason: "Not enough money in your account",
 	}
